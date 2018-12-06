@@ -9,12 +9,6 @@
     private $password = ''; //Contraseña
     private $conexion;
 
-    function __construct($host, $user, $password){
-      $this->host = $host;
-      $this->user = $user;
-      $this->password = $password;
-    }
-
     function initConexion($nombre_db){
       $this->conexion = new mysqli($this->host, $this->user, $this->password, $nombre_db);
       if ($this->conexion->connect_error) {
@@ -111,7 +105,8 @@
     //funcion para consultar información en bases de datos
     function consultar($tablas, $campos, $condicion = ""){
       $sql = "SELECT ";
-      $ultima_key = end(array_keys($campos));
+      $a = array_keys($campos);
+      $ultima_key = end($a);
       foreach ($campos as $key => $value) {
         $sql .= $value;
         if ($key!=$ultima_key) {
@@ -119,7 +114,8 @@
         }else $sql .=" FROM ";
       }
 
-      $ultima_key = end(array_keys($tablas));
+      $b = array_keys($tablas);
+      $ultima_key = end($b);
       foreach ($tablas as $key => $value) {
         $sql .= $value;
         if ($key!=$ultima_key) {

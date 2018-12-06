@@ -21,9 +21,15 @@
                 $response['acceso'] = 'Acceso rechazado';
             }
         } else {
-            $response['acceso'] = 'No existen usuarios registrados'; //Mostrar alerta Si no existen usuarios registrados
-            $response['msg'] = 'Presione el botón Inicializar Usuarios'; //Enviar mensajes para registrar los usuarios
+            $response['msg'] = 'Email incorrecto';
+            $response['acceso'] = 'Acceso rechazado'; //Mostrar alerta si no existen usuarios registrados
+            
         }
+    } else {
+        $response['conexion'] = 'Error en el inicio de conexion';
     }
+
+    echo json_encode($response); //Envio el resultado al archivo js, no utilizo encode porque me ha presentado problemas
+    $con->cerrarConexion();
 
  ?>
