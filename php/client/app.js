@@ -33,15 +33,13 @@ class EventsManager {
 
     poblarCalendario(eventos) {
         var fecha = new Date();
-        var fechaActual = fecha.getFullYear()+"-"+(("0" + (fecha.getMonth() + 1)).slice(-2))+"-"+(("0" + fecha.getDate()).slice(-2));
-        console.log(fechaActual);
         $('.calendario').fullCalendar({
             header: {
         		left: 'prev,next today',
         		center: 'title',
         		right: 'month,agendaWeek,basicDay'
         	},
-        	defaultDate: fechaActual,
+        	defaultDate: fecha.getFullYear()+'-'+(fecha.getMonth()+1)+'-'+fecha.getDate(),
         	navLinks: true,
         	editable: true,
         	eventLimit: true,
