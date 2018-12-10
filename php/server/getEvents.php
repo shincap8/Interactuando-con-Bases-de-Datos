@@ -2,12 +2,11 @@
     require('./conector.php');
     
     $con = new ConectorBD();
-    $response['msg'] = $con->initConexion('agenda_db');
-    $username = $_SESSION["email"];
-    
+    $response['conexion'] = $con->initConexion('agenda_db');
+    $session = $_SESSION["email"];
 
-    if ($response['msg']=="OK") {
-        $resultado = $con->consultar(['eventos'],['*'], "WHERE fk_usuario = '" . $username . "'", '');
+    if ($response['conexion']=="OK") {
+        $resultado = $con->consultar(['eventos'],['*'], "WHERE fk_usuario = '" . $session . "'");
 
         $i=0;
 
@@ -28,8 +27,7 @@
             $response['eventos'][$i]['diaCompleto'] = $diaCompleto;
             $i++;
         }
-        $response['getData'] = "OK";
+        $response['msg'] = "OK";
     }
     echo json_encode($response);
-    $con->cerrarConexion();
 ?>
