@@ -1,32 +1,44 @@
 <?php
-    require ('./conector.php');
+    require('./conector.php');
 
-    $con= new ConectorBD();
-
+    $con = new ConectorBD();
     $response['conexion'] = $con->initConexion('agenda_db');
+    $session = $_SESSION["email"];
+    $titulo = $_POST['titulo'];
+    $fecha_inicio  = $_POST['start_date'];
+    $hora_inicio = $_POST['start_hour'];
+    $fecha_finalizacion = $_POST['end_date'];
+    $hora_finalizacion = $_POST['end_hour'];
+    $dia_completo = $_POST['allday'];
+
+    $response['dia'] = $dia_completo;
+
+    if ($dia_completo == false) {
+        $dia_completo = 0;
+        $query = "INSERT INTO eventos (titulo, fecha_inicio, hora_inicio, fecha_finalizacion, hora_finalizacion, dia_completo, fk_usuario) VALUES ('$titulo', '$fecha_inicio', '$hora_inicio', '$fecha_finalizacion', '$hora_finalizacion', '$dia_completo', '$session' )";
+    } else {
+        $dia_completo = 1;
+        $query = "INSERT INTO eventos (titulo, fecha_inicio, dia_completo, fk_usuario) VALUES ('$titulo', '$fecha_inicio', '$dia_completo', '$session' )";
+    }
+
+    
+    
 
     if ($response['conexion'] == 'OK') {
-        $data['titulo'] = '"'.$_POST['titulo'].'"';
-        $data['fecha_inicio'] = '"' . $_POST['start_date'] . '"';
-        $data['hora_inicio'] = '"' . $_POST['start_hour'] . ':00"';
-        $data['fecha_finalizacion'] = '"' . $_POST['end_date'] . '"';
-        $data['hora_finalizacion'] = '"' . $_POST['end_hour'] . ':00"';
-        $data['dia_completo'] = $_POST['allday'];
-        $data['fk_usuario'] = '"' . $_SESSION['email'] . '"';
-
-        if (con->insertData('eventos', $data)) {
-            $resultado = $con->consultar(['eventos'],['MAX(id)']);
+        if ($con->ejecutarQuery($query) == true) {
+            $resultado = $con->consultar(['eventos'], ['MAX(id)']);
             while ($fila = $resultado->fetch_assoc()) {
                 $response['id'] = $fila['MAX(id)'];
             }
             $response['msg'] = "OK";
-        }else {
+        } else {
             $response['msg'] = "Ha ocurrido un error al guardar el evento";
         }
-    }else {
+    } else {
         $response['msg'] = "Error en la comunicacion con la base de datos";
     }
 
-    echo json_encode($response);
     
+
+    echo json_encode($response);   
  ?>
