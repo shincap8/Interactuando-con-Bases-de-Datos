@@ -4,8 +4,8 @@
     $con = new ConectorBD();
     $response['conexion'] = $con->initConexion('agenda_db');
 
-    if ($response['conexion' == 'OK']) {
-        $data['id'] = '"'.$_POST['id'].'"';
+    if ($response['conexion'] == "OK"){
+        $data['id'] = '"' . $_POST['id'] . '"';
         $data['fecha_inicio'] = '"' . $_POST['start_date'] . '"';
         $data['hora_inicio'] = '"' . $_POST['start_hour'] . '"';
         $data['fecha_finalizacion'] = '"' . $_POST['end_date'] . '"';
