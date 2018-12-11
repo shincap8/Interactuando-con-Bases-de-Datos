@@ -76,14 +76,14 @@ class EventsManager {
       form_data.append('titulo', $('#titulo').val())
       form_data.append('start_date', $('#start_date').val())
       form_data.append('allDay', document.getElementById('allDay').checked)
-      if (!document.getElementById('allDay').checked) {
+      if (document.getElementById('allDay').checked == false) {
         form_data.append('end_date', $('#end_date').val())
-        form_data.append('end_hour', $('#end_hour').val())
-        form_data.append('start_hour', $('#start_hour').val())
+        form_data.append('end_hour', $('#end_hour').val()+":00")
+        form_data.append('start_hour', $('#start_hour').val()+":00")
       }else {
-        form_data.append('end_date', "")
-        form_data.append('end_hour', "")
-        form_data.append('start_hour', "")
+        form_data.append('end_date', null)
+        form_data.append('end_hour', null)
+        form_data.append('start_hour', null)
       }
       $.ajax({
         url: '../server/new_event.php',
