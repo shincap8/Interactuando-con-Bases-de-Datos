@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 10-12-2018 a las 22:46:11
+-- Tiempo de generación: 11-12-2018 a las 23:27:06
 -- Versión del servidor: 10.1.36-MariaDB
 -- Versión de PHP: 7.2.11
 
@@ -44,11 +44,11 @@ CREATE TABLE `eventos` (
 --
 
 INSERT INTO `eventos` (`id`, `titulo`, `fecha_inicio`, `hora_inicio`, `fecha_finalizacion`, `hora_finalizacion`, `dia_completo`, `fk_usuario`) VALUES
-(0, 'Navidad!', '2018-12-24', NULL, '2018-12-25', NULL, 1, 'eduardo@email.com'),
 (1, 'Navidad con mi Familia', '2018-12-24', NULL, NULL, NULL, 1, 'rafa@email.com'),
-(2, 'Almuerzo Familiar', '2018-12-21', '12:30:00', NULL, '15:00:00', 0, 'rafa@email.com'),
+(2, 'Almuerzo Familiar', '2018-12-21', '12:30:00', '0000-00-00', '00:00:00', 0, 'rafa@email.com'),
 (3, 'Navidad!!', '2018-12-24', NULL, NULL, NULL, 1, 'sarita@email.com'),
-(4, 'Paseo', '2018-12-22', '08:30:00', '2018-12-25', '20:00:00', 0, 'sarita@email.com');
+(4, 'Paseo', '2018-12-22', '08:30:00', '2018-12-25', '20:00:00', 0, 'sarita@email.com'),
+(5, 'Navidad!', '2018-12-24', NULL, NULL, NULL, 1, 'eduardo@email.com');
 
 -- --------------------------------------------------------
 
@@ -88,6 +88,16 @@ ALTER TABLE `eventos`
 --
 ALTER TABLE `usuarios`
   ADD PRIMARY KEY (`email`);
+
+--
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `eventos`
+--
+ALTER TABLE `eventos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Restricciones para tablas volcadas
