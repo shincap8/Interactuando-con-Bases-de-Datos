@@ -13,6 +13,7 @@
         $response['msg'] = 'Erro en la comunicacion con la base de datos';
     }
 
+    $con->cerrarConexion();
     echo json_encode($response);
 
  ?>
