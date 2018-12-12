@@ -19,6 +19,7 @@ class EventsManager {
           success: (data) =>{
             if (data.msg=="OK") {
               this.poblarCalendario(data.eventos)
+
             }else {
               alert(data.msg)
               window.location.href = 'index.html';
@@ -32,14 +33,16 @@ class EventsManager {
     }
 
     poblarCalendario(eventos) {
-        var fecha = new Date();
+       
+     
+
         $('.calendario').fullCalendar({
             header: {
         		left: 'prev,next today',
         		center: 'title',
         		right: 'month,agendaWeek,basicDay'
         	},
-        	defaultDate: fecha.getFullYear()+'-'+(fecha.getMonth()+1)+'-'+fecha.getDate(),
+        	defaultDate: new Date(),
         	navLinks: true,
         	editable: true,
         	eventLimit: true,
@@ -53,6 +56,7 @@ class EventsManager {
           eventDragStart: (event,jsEvent) => {
             $('.delete-btn').find('img').attr('src', "img/trash-open.png");
             $('.delete-btn').css('background-color', '#a70f19')
+
           },
           eventDragStop: (event,jsEvent) =>{
             var trashEl = $('.delete-btn');
@@ -76,14 +80,14 @@ class EventsManager {
       form_data.append('titulo', $('#titulo').val())
       form_data.append('start_date', $('#start_date').val())
       form_data.append('allDay', document.getElementById('allDay').checked)
-      if (document.getElementById('allDay').checked == false) {
+      if (!document.getElementById('allDay').checked) {
         form_data.append('end_date', $('#end_date').val())
-        form_data.append('end_hour', $('#end_hour').val()+":00")
-        form_data.append('start_hour', $('#start_hour').val()+":00")
+        form_data.append('end_hour', $('#end_hour').val())
+        form_data.append('start_hour', $('#start_hour').val())
       }else {
-        form_data.append('end_date', null)
-        form_data.append('end_hour', null)
-        form_data.append('start_hour', null)
+        form_data.append('end_date', "")
+        form_data.append('end_hour', "")
+        form_data.append('start_hour', "")
       }
       $.ajax({
         url: '../server/new_event.php',
@@ -103,16 +107,15 @@ class EventsManager {
                 allDay: true
               })
             }else {
+            
               $('.calendario').fullCalendar('renderEvent', {
+                id: data.id ,   
                 title: $('#titulo').val(),
                 start: $('#start_date').val()+" "+$('#start_hour').val(),
                 allDay: false,
                 end: $('#end_date').val()+" "+$('#end_hour').val()
               })
             }
-
-
-
 
           }else {
             alert(data.msg)
@@ -126,7 +129,7 @@ class EventsManager {
     }
 
     eliminarEvento(event, jsEvent){
-
+    console.log(event.id);
       var form_data = new FormData()
       form_data.append('id', event.id)
       $.ajax({
@@ -153,6 +156,7 @@ class EventsManager {
     }
 
     actualizarEvento(evento) {
+
         let id = evento.id,
             start = moment(evento.start).format('YYYY-MM-DD HH:mm:ss'),
             end = moment(evento.end).format('YYYY-MM-DD HH:mm:ss'),
