@@ -1,6 +1,7 @@
 const mongoose = require('mongoose'),
       Schema = mongoose.Schema,
       autoIncrement = require('mongoose-auto-increment');
+var connection = mongoose.createConnection("mongodb://localhost/agenda_db");
 
 let EventSchema = new Schema({
           title: { type: String, required: true },
