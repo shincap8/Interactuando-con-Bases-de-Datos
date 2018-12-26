@@ -1,7 +1,5 @@
 const mongoose = require('mongoose'),
-      Schema = mongoose.Schema,
-      autoIncrement = require('mongoose-auto-increment');
-var connection = mongoose.createConnection("mongodb://localhost/agenda_db");
+      Schema = mongoose.Schema
 
 let EventSchema = new Schema({
           title: { type: String, required: true },
@@ -12,9 +10,6 @@ let EventSchema = new Schema({
           end_hour: { type: String, required: false},
           fk_usuario: {type: String, required: true}
       })
-
-autoIncrement.initialize(connection)
-EventSchema.plugin(autoIncrement.plugin, {model: 'Evento', startAt: 1});
 
 let EventoModel = mongoose.model('Evento', EventSchema)
 

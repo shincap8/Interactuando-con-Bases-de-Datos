@@ -2,7 +2,6 @@ const Router = require('express').Router();
 const Usuario = require('./users.js');
 const Evento = require('./events.js');
 const Operaciones = require('./crud.js');
-let ObjectId = require('mongoose').Types.ObjectId;
 
 //Verificar si existe la base de Datos
 Usuario.find({}).count({}, function(err, count) {
@@ -37,15 +36,15 @@ Evento.find({}).count({}, function (err, count) {
 //validar formulario de inicio de sesion
 Router.post('/login', function(req,res){
     let user =  req.body.user
-    let password = req.body.password,
+    let password = req.body.pass,
     sess = req.session;
-    Usuario.find({user: user}).count({}, function(err, count){
+    Usuario.find({email: user}).count({}, function(err, count){
         if (err) {
             res.status(500);
             res.json(err);
         } else {
             if(count == 1){
-                Usuario.find({user: user, password: password}).count({}, function(err, count){
+                Usuario.find({email: user, password: password}).count({}, function(err, count){
                     if(err){
                         res.status(500);
                         res.json(err);
@@ -73,11 +72,11 @@ Router.get('/all', function (req, res) {
                 res.send('logout');
                 res.end();
             } else {
-                Usuario.find({ user: req.session.user }).exec({}, function (err, doc) {
+                Usuario.find({ email: req.session.user }).exec({}, function (err, doc) {
                     if (err) {
                         res.send('logout');
                     } else {
-                        Evento.find({ fk_usuario: req.session.email_user }).exec({}, function (err, doc) {
+                        Evento.find({ fk_usuario: req.session.user }).exec({}, function (err, doc) {
                             if (err) {
                                 res.status(500);
                                 res.json(err);

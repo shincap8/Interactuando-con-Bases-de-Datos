@@ -11,11 +11,11 @@ const app = express();
 
 const Server = http.createServer(app);
 
-mongoose.connect('mongodb://localhost/agenda_db', { useNewUrlParser: true});
+mongoose.connect('mongodb://localhost/agenda_db');
 
-app.use(express.static('../client'))
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true}))
+app.use(express.static('../client'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true}));
 app.use(session({
     secret: 'secret-pass',
     cookie: { maxAge: 3600000},
