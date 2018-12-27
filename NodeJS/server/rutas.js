@@ -4,7 +4,7 @@ const Evento = require('./events.js');
 const Operaciones = require('./crud.js');
 
 //Verificar si existe la base de Datos
-Usuario.find({}).count({}, function(err, count) {
+Usuario.find({}).countDocuments({}, function(err, count) {
     if (count>0) {
         console.log("Ya existen usuarios en la base de datos");
         
@@ -19,7 +19,7 @@ Usuario.find({}).count({}, function(err, count) {
     }
 })
 
-Evento.find({}).count({}, function (err, count) {
+Evento.find({}).countDocuments({}, function (err, count) {
     if (count > 0) {
         console.log("Ya existen eventos en la base de datos");
     } else {
@@ -38,13 +38,13 @@ Router.post('/login', function(req,res){
     let user =  req.body.user
     let password = req.body.pass,
     sess = req.session;
-    Usuario.find({email: user}).count({}, function(err, count){
+    Usuario.find({email: user}).countDocuments({}, function(err, count){
         if (err) {
             res.status(500);
             res.json(err);
         } else {
             if(count == 1){
-                Usuario.find({email: user, password: password}).count({}, function(err, count){
+                Usuario.find({email: user, password: password}).countDocuments({}, function(err, count){
                     if(err){
                         res.status(500);
                         res.json(err);
@@ -95,43 +95,33 @@ Router.get('/all', function (req, res) {
 
 //Crear eventos
 Router.post('/new', function (req, res) {
-    req.session.reload(function (err) {
-        if (err) {
-            console.log(err);
-            res.json('logout');
-        } else {
-            Usuario.findOne({ user: req.session.user }).exec({}, function (err, doc){
-                Evento.nextCount(function (err, count) {
-                    newID = count;
-                });
+    if (req.session.user) {
+            let title = req.body.title,
+            start = req.body.start,
+            end = req.body.end,
+            start_hour = req.body.start_hour,
+            end_hour = req.body.end_hour,
+            fk_usuario = req.session.user
 
-                let title = req.body.title,
-                    start = req.body.start,
-                    end = req.body.end,
-                    start_hour = req.body.start_hour,
-                    end_hour = req.body.end_hour,
-                    fk_usuario = req.session.email_user
-                
-                let evento = new Evento({
-                    title: title,
-                    start: start,
-                    end: end,
-                    start_hour: start_hour,
-                    end_hour: end_hour,
-                    fk_usuario: fk_usuario
-                })
+        let evento = new Evento({
+            title: title,
+            start: start,
+            end: end,
+            start_hour: start_hour,
+            end_hour: end_hour,
+            fk_usuario: fk_usuario
+        });
 
-                evento.save(function(err){
-                    if (err){
-                        console.log(err);
-                        res.json(err);
-                    }
-                    res.json(newID)
-                    res.send("El evento ha sido guardado exitosamente")
-                })
-            })
+        evento.save(function (err, doc) {
+            if (err) {
+                res.status(500);
+                res.json(err);
         }
-    })
+            res.json(doc);
+        });
+    } else{
+        res.send('logout');
+    }
 })
 
 //Eliminar eventos
