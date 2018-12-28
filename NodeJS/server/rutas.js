@@ -125,16 +125,15 @@ Router.post('/new', function (req, res) {
 })
 
 //Eliminar eventos
-Router.post('/delete/:_id', function (req, res) {
-    let id = req.params._id; 
+Router.post('/delete/:id', function (req, res) {
+    let uid = req.params.id;
     req.session.reload(function (err) {
-        if (err) {
+        if(err){
             console.log(err);
             res.send("logout");
         }else{
-            Evento.remove({_id: id}, function(err){
+            Evento.deleteOne({ _id: uid }, function (err) {
                 if (err) {
-                    console.log(err);
                     res.status(500);
                     res.json(err);
                 }
@@ -142,33 +141,24 @@ Router.post('/delete/:_id', function (req, res) {
             })
         }
     })
+        
 })
 
 //Actualizar Evento
-Router.post('/update/:_id&:start&:end', function (req, res) {
-    req.session.reload(function(err){
-        if(err){
-            console.log(err)
-            res.send("logout")
-        }else{
-            Evento.find({_id:req.params._id}).exec((error, result) => {
-                let id = req.params._id,
-                start = req.params.start,
-                end = req.params.end
-                if (err) {
-                    res.send(err)
-                }else{
-                    Evento.update({_id: id}, {start:start, end:end}, (err, res)=>{
-                        if(err){
-                            res.send(err)
-                        }else{
-                            res.send("El evento ha sido actualizado exitosamente")
-                        }
-                    })
-                }
-            })
-        }
-    })
+Router.post('/update', function (req, res) {
+    Evento.findOneAndUpdate({_id:req.body.id},
+        {
+            $set: {
+                start: req.body.start,
+                end: req.body.end
+            }
+        }, function (err) {
+            if (err) {
+                res.status(500);
+                res.send(err);
+            }
+            res.send("Evento Actualizado")
+        })
 })
 
 
