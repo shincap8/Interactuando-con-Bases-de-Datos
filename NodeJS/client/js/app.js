@@ -14,7 +14,6 @@ class EventsManager {
       if (response == "logout") {
         window.location.href = 'index.html';
       } else {
-        console.log(response);
         this.inicializarCalendario(response);
       }
     })
@@ -84,9 +83,13 @@ class EventsManager {
           end: end
         }
         $.post(url, ev, (response) => {
-          alert(response)
+          if (response != "logout") {
+            ev._id = response.id;
+            $('.calendario').fullCalendar('renderEvent', ev);
+            alert("Evento guardado con exito");
+            location.reload();
+          }
         })
-        $('.calendario').fullCalendar('renderEvent', ev)
       } else {
         alert("Complete los campos obligatorios para el evento")
       }
@@ -94,9 +97,10 @@ class EventsManager {
   }
 
   eliminarEvento(evento) {
-    let eventId = evento.id
+    let eventId = evento._id;
     $.post('/events/delete/' + eventId, { id: eventId }, (response) => {
-      alert(response)
+      alert(response);
+      initForm();
     });
     this.obtenerDataInicial();
   }
